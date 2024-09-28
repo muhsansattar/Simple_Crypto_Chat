@@ -1,0 +1,296 @@
+<html>
+  <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="styles.css">
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+
+        <script src="https://github.com/WalletConnect/walletconnect-monorepo/releases/download/1.4.1/web3-provider.min.js"></script>
+        <title>Crypto Chat</title>
+  </head>
+  <body class="bg-secondary scroll5">
+
+    <iframe src="" width="25%" height="80%" id="my-iframe" class="border-4 border border-dark shadow2" style="display: block; margin-left: 38%; position: absolute; z-index: 99; top: 10%;border-radius: 12px;">Click ESC to close.</iframe>
+
+        <!--LogIn-->
+        <div id="login" class="text-center bg-white w-25 border border-dark border-4 container mt-5 p-4" style="border-radius: 12px;"><div class="row"></div>
+            <h2 class="mb-2">LOG IN</h2><hr>
+            <h5 class="">You must login with metamask to use dApp!</h5>
+            <i class="bi bi-arrow-down" style="font-size: 2.5rem;"></i><br>
+            <button type="button" class="btn btn-outline-dark me-3 w-100 border-3 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#logInModal" id="create-btn">Connect Wallet</button>
+            <p class="mt-3">It is recommended to read <strong>instructions</strong> before you use dApp for the first time.</p>
+            <i class="bi bi-arrow-down" style="font-size: 2.5rem;"></i><br>
+            <button type="button" class="btn btn-dark w-50 border-3 fw-bold" data-bs-toggle="modal" data-bs-target="#instructionsModal" id="create-btn">Instructions</button>
+            <div class="mt-5 p-2 border border-2 border-dark text-danger fw-bold" style="border-radius: 12px;">
+                <h4 class="fw-bold">!NEW!<h4><hr><h5>NFT support is now added! <br>Works for every ERC-725 or ERC-1155 NFTs!
+                <br><br>
+                You can now buy Crypto with Fiat through this website!</h5>
+                <hr>
+                <p class="text-dark">Version 1.1.0</p>
+            </div>
+        </div>
+
+
+
+
+                  <!--All-->
+                  <div id="all" class="container overflow-auto" style="height: 100%; "><div class="row" style="height: 90%;">
+
+
+                      <!--All Groups:-->
+                      <div id="allGorups" class="w-25 col-2 mt-3 container bg-white overflow-auto scrollbar-hidden" style="border-radius: 12px; border: 3px solid black; height: 100%;">
+                          <h2 class="text-center mt-2">Profile:</h2><hr>
+                    
+                          <div id="accInfo" class="text-center container bg-white pt-3 pb-3"><div class="row">
+                              <div id="profileIMG" class="col-5"></div>
+                              <div class="col-7">
+                                  <p id="username" class="fw-bold fs-4 text-break"></p>
+                                  <p id="ethAddress" class="fs-7"></p>
+                              </div>
+                              <div id="balancesDiv-btn">
+
+                              </div>
+                              <button type="button" id="balances-btn" class="btn btn-outline-dark mt-3 col-12 border border-dark border-3 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#balancesModal">My Balances</button>
+                              <button type="button" class="btn btn-outline-dark mt-3 col-6 border border-dark border-3 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#updateProfileModal">Profile Settings</button>
+                              <button type="button" id="logout-btn" class="btn btn-outline-dark mt-3 col-6 border border-dark border-3 fw-bold rounded-pill">Log Out</button>
+                          </div></div><hr>
+          
+                          <button type="button" class="btn btn-outline-dark me-3 w-100 border-3 fw-bold rounded-pill" data-bs-toggle="modal" data-bs-target="#createModal" id="create-btn">Create Chat Group</button>
+                          <hr><h2 class="text-center mb-2">All Chat Groups:</h2>
+                          <div class="text-center"><i class="bi bi-arrow-down" style="font-size: 2.5rem;"></i><br></div>
+                          <div id="allChatGroups" class="container overflow-auto"></div>
+                      </div>
+          
+                      <!--Chat:-->
+                      <div id="chat" class="w-45 col-5  mt-3 container bg-white overflow-auto scrollbar-hidden" style="border-radius: 12px; border: 3px solid black; height: 100%;">
+                          <h2 class="text-center mt-2">Chat:</h2><hr>
+                          <div id="chat-title"></div>
+                          <div id="chat-div" class="p-2 overflow-auto scroll4" style=" height: 64%; border-radius: 12px;"></div>
+                          <div id="message-input-div">
+                          </div>
+                      </div>
+          
+                      <!--Group Info:-->
+                      <div id="groupInfo" class="w-25 col-2 mt-3 container bg-white overflow-auto scrollbar-hidden pe-3 ps-3" style="border-radius: 12px; border: 3px solid black; max-height: 100%;">
+                          <h2 class="text-center mt-2">Chat Group Info:</h2><hr>
+                          <div id="groupInfoDiv"></div>
+                          <div class="overflow-auto" id="infoAboutGroup">
+                              <div id="groupImage" class="text-center"></div>
+                              <div id="groupName" class="text-center mt-3 fw-bold fs-2 text-break"></div>
+                              <div id="groupDescription" class="text-center fs-5 mt-4 text-break"></div><hr>
+                              <div id="chain" class="ms-3"></div>
+                              <div id="token" class="ms-3"></div>
+                              <div id="tokenAmount" class="ms-3"></div>
+                              <div id="buttonJoinDiv"></div>
+                              <div id="info3" class="fw-bold text-center mb-2 fs-4 text-success mt-4"></div>
+                          </div>
+                      </div></div>
+                  </div>
+          
+
+
+
+                <!--MODAL - CREATE GROUP-->
+                <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="createLabel">Create Chat Group:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="chatGroupName-input" class="form-label">Name of the Chat Group:</label>
+                                    <input type="text" class="form-control" id="chatGroupName-input" placeholder="Chat Group Name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description-input" class="form-label">Decsription of the Chat Group:</label>
+                                    <textarea type="text" class="form-control" id="description-input" placeholder="Chat Group Description"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="token-address-input" class="form-label">Limit for the Chat Group (!any ERC20 token address!) - if empty native token for selected chain will be selected:</label>
+                                    <input type="text" class="form-control" id="token-address-input" placeholder="Token Address">
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" value="yes" id="checkbox">
+                                    <label class="form-check-label" id="checkbox" for="checkbox">Select if it is NFT!</label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="token-amount-input" class="form-label">Set amount:</label>
+                                    <input type="number" class="form-control" id="token-amount-input" placeholder="Amount of Token">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="token-input" class="form-label">Select Chain:</label>
+                                    <select name="Chain" id="chain-select" class="form-select">
+                                       <option selected value="eth">Ethereum Mainnet</option>
+                                        <option value="bsc">Binance Smart Chain</option>
+                                        <option value="kovan">Kovan Testnet</option>
+                                        <option value="ropsten">Ropsten Testnet</option>
+                                        <option value="rinkeby">Rinkeby Testnet</option>
+                                        <option value="0x61">Bcs Testnet</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="chatGroupIMGInput" class="form-label">Chat Group Picture (.png, .jpg, .gif):</label>
+                                    <input type="file" class="form-control" placeholder="Chat Group Picture" id="chatGroupIMGInput">
+                                </div>
+                            </form>
+                            <button class="btn btn-dark w-100" id="createGroup-btn">Create</button>
+                            <p id="info2" class="text-center"></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!--MODAL - CONNECT WALLET:-->
+                <div class="modal fade" id="logInModal" tabindex="-1" aria-labelledby="logInModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="logInModalLabel">Connect Your Wallet:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <span>If you want to connect your <strong>MetaMask</strong> wallet click button bellow:</span><br>
+                            <button type="button" id="btn-metamask" class="btn btn-dark rounded-pill mb-2 mt-1">Connect with MetaMask</button><br><br>
+                            <span>If you want to connect with <strong>WalletConnect</strong> click button bellow:</span><br>
+                            <button type="button" id="btn-walletconnect" class="btn btn-dark rounded-pill mb-2 mt-1">Connect with WalletConnect</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!--MODAL - UPDATE PROFILE:-->
+                <div class="modal" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="updateProfileLabel">Update prodile:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="change-username-input" class="form-label">New username:</label>
+                                    <input type="text" class="form-control" id="change-username-input" placeholder="Username">
+                                </div>
+                            </form>
+                            <button class="btn btn-dark w-100" id="change-username-btn">Change Username</button>
+                            <p id="info" class="text-center mb-3 mt-2"></p><hr>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="changeProfilePic" class="form-label">New profile picture (.png, .jpg, .gif):</label>
+                                    <input type="file" class="form-control" placeholder="Profile picture" id="changeProfilePic">
+                                </div>
+                            </form>
+                            <button class="btn btn-dark w-100" id="change-pic-btn">Change Profile Picture</button>
+                            <p id="info1" class="text-center"></p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!--MODAL - BALANCES:-->
+                <div class="modal" id="balancesModal" tabindex="-1" aria-labelledby="balancesModal" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="balancesModal">Balances:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <button id="btn-buy" class="btn btn-outline-dark rounded-pill border-3 fw-bold w-100 mb-3">Buy Crypto</button>
+                            <div class="input-group">
+                                <select class="form-select" id="balances-chain-select" aria-label="Example select with button addon">
+                                    <option selected value="eth">Ethereum Mainnet</option>
+                                    <option value="bsc">Binance Smart Chain</option>
+                                    <option value="kovan">Kovan Testnet</option>
+                                    <option value="ropsten">Ropsten Testnet</option>
+                                    <option value="rinkeby">Rinkeby Testnet</option>
+                                    <option value="0x61">BSC Testnet</option>
+                                </select>
+                                <button class="btn btn-dark" type="button" id="show-balances-btn">Show</button>
+                            </div>
+                            <div id="balancesDiv" class="container"></div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <!--MODAL - INSTRUCTIONS:-->
+                <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModal" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title" id="instructionsModal">Instructions:</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body mt-3 fs-5  scroll4">
+                            <h3>To use this Chatting dApp:</h3>
+                            <ol>
+                                <li>You need to log in with <strong>MetaMask</strong> or <strong>WalletConnect.</strong></li>
+                                <li>When you are logged in, it is recommended and nice to <strong>change your profile picture and username</strong> to whatever you want.</li>
+                                <li>Before you start Chatting please, read the <strong>rules</strong> in the middle.</li>
+                                <li><strong>Sometimes sending message or joining group will take a bit so please be patient.</strong></li>
+                            </ol>
+                            <hr>
+                            <h3 class="mt-3">How to start chatting:</h3>
+                            <ol>
+                                <li>First you can check your balances under your profile picture and username (after you are logged in).</li>
+                                <li>On the left side you should see All Chat Groups. Click on <strong>CHAT</strong> button there if you want to start chatiing in that group. If there is no group created you can create one!</li>
+                                <li>After you have pressed CHAT button on the right side of the screen you should see <strong>Information</strong> about that chat group that you selected. There you can see all details.</li>
+                                <li>if you want to youn that group click <strong>Start Chatting</strong> button. If you have enough balances of required token you will be let in.</li>
+                            </ol>
+                            <hr>
+                            <h3 class="mt-3">How to create Chat Group:</h3>
+                            <ol>
+                                <li>If there is not any group created or you just want to create new Chat Group, then click <strong>Create Chat Group</strong> button.</li>
+                                <li>Write name, description, set required token (if you leave it empty, main token will be selected for that chain), then set required amount (if you want anyone to join write 0) and last select Chat Group Image.</li>
+                                <li>After you have done that click <strong>Create</strong> button and your Chat Group will be created.</li>
+                            </ol>
+                            <hr>
+                            <h3 class="mt-3">Buying Crypto:</h3>
+                            <ol>
+                                <li>Buying crypto through this website is powered by <strong><a href="https://onramper.com/" class="text-dark">Onramper Exchange</a></strong> and <strong><a href="https://moralis.io/" class="text-dark">Moralis Plugins</a>.</strong></li>
+                                <li>To buy crypto click <span class="fst-italic">My Balances</span> button and than click <span class="fst-italic">Buy Crypto</span> button.</li>
+                                <li>After you have done that Onramper Exchange window will open than use it to buy Crypto.</li>
+                                <li>If you are struggeling to close Onramper window, you can close it by clicking button ESC or clicking enywhere else on the website.</li>
+                            </ol>
+                            <hr>
+                            <h4><strong>COMMING SOON:</strong></h4><h5>UI update, new home page and more is coming later this year!</h5>
+                            <hr>
+                            <div class="text-center mt-3 mb-5">
+                                <span>Built by: <strong>Tjian</strong> (donate:<strong> 0xC4C6A0bc6648a4F343bd86D7C48C9967530fbB48</strong>)</span><br>
+                                <div class="d-inline-block float-center">
+                                <div class="fs-3 text-decoration-none text-success mt-4">Powerd by: <strong>MORALIS</strong></div>
+                                </div>
+                                <div class="d-block float-center ms-5">
+                                    <a href="https://moralis.io/" target="_blank">
+                                        <img src="https://moralis.io/wp-content/uploads/2021/06/cropped-Moralis-Favicon-Glass.png" alt="Moralis" width="100" height="100">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+        <script src="mainNFT.js"></script>
+        <script src="logNFT.js"></script>
+        <script src="groupNFT.js"></script>
+        <script src="chatNFT.js"></script>
+  </body>
+</html>
